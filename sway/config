@@ -1,0 +1,292 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+# Your preferred terminal emulator
+set $term alacritty
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+# set $menu dmenu_path | dmenu | xargs swaymsg exec --
+ set $menu wofi --show run | xargs swaymsg exec --
+
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+#output * bg /home/forest/Pictures/Wallpapers/1589675341038.png fill
+#output * bg /home/forest/Pictures/Wallpapers/RedSpace.jpg fill
+exec ~/.azotebg
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+### Idle configuration
+#
+# Example configuration:
+#
+ exec swayidle -w \
+          timeout 300 'swaylock -f -c 000000'\
+          timeout 600 'swaymsg "output * dpms off"' \
+           resume 'swaymsg "output * dpms on"' \
+          before-sleep 'swaylock -f -c 000000'
+
+
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+### Input configuration
+#
+# Example configuration:
+#
+#   input "2:14:SynPS/2_Synaptics_TouchPad" {
+#       dwt enabled
+#       tap enabled
+#       natural_scroll enabled
+#       middle_emulation enabled
+#   }
+   input "1739:0:Synaptics_TM3053-004"  {
+       dwt enabled
+       natural_scroll enabled
+       pointer_accel 0
+       scroll_factor 0.3
+   }
+   input "1133:4136:Logitech_M570"  {
+       dwt enabled
+       accel_profile flat
+       pointer_accel -0.2
+       scroll_factor 0.8
+   }
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec $menu
+
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace 1
+    bindsym $mod+2 workspace 2
+    bindsym $mod+3 workspace 3
+    bindsym $mod+4 workspace 4
+    bindsym $mod+5 workspace 5
+    bindsym $mod+6 workspace 6
+    bindsym $mod+7 workspace 7
+    bindsym $mod+8 workspace 8
+    bindsym $mod+9 workspace 9
+    bindsym $mod+0 workspace 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace 1
+    bindsym $mod+Shift+2 move container to workspace 2
+    bindsym $mod+Shift+3 move container to workspace 3
+    bindsym $mod+Shift+4 move container to workspace 4
+    bindsym $mod+Shift+5 move container to workspace 5
+    bindsym $mod+Shift+6 move container to workspace 6
+    bindsym $mod+Shift+7 move container to workspace 7
+    bindsym $mod+Shift+8 move container to workspace 8
+    bindsym $mod+Shift+9 move container to workspace 9
+    bindsym $mod+Shift+0 move container to workspace 10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+slash splith
+    bindsym $mod+equal splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+t layout tabbed
+    bindsym $mod+w layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+
+#
+# Program shortcuts:
+#
+    # bindsym Mod1+space exec wofi --show drun --allow-images
+    bindsym Mod1+space exec nwggrid -p
+    bindsym $mod+p exec pcmanfm
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Media player controls
+bindsym Control+Up exec playerctl play-pause
+bindsym Control+Down exec playerctl stop
+bindsym Control+Right exec playerctl next
+bindsym Control+Left exec playerctl previous
+
+# Print screen
+bindsym Shift+print exec --no-startup-id slurp | grim -g - $(xdg-user-dir PICTURES)/$(date +'screenshot_%Y-%m-%d-%H%M%S.png')
+bindsym print exec --no-startup-id grim $(xdg-user-dir PICTURES)/$(date +'screenshot_%Y-%m-%d-%H%M%S.png') && notify-send "Screenshot saved."
+
+# wofi emoji
+bindsym $mod+e exec wofi-emoji
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+ # bar {
+ #     position top
+ #
+ #     # When the status_command prints a new line to stdout, swaybar updates.
+ #     # The default just shows the current date and time.
+ #     # status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+ #     status_command while ~/.config/sway/status.sh; do sleep 1; done
+ #
+ #     colors {
+ #         statusline #ffffff
+ #         background #323232
+ #         inactive_workspace #32323200 #32323200 #5c5c5c
+ #     }
+ # }
+
+default_border pixel 5
+hide_edge_borders smart
+
+# Floating section
+# for_window [class="Ferdi"] floating enable
+for_window [class="Ferdi"] floating enable, move position 950px 1px
+for_window [app_id="org.keepassxc.KeePassXC"] floating enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="wofi"] border none
+for_window [class="Viewnior"] floating enable, border none, fullscreen
+for_window [app_id="mpv"] floating enable, border none
+
+
+# Brightness/Volume + wob osd
+exec_always "killall wob"
+exec_always "rm /tmp/swaypipe.bright; mkfifo /tmp/swaypipe.bright"
+exec_always "tail -f "/tmp/swaypipe.bright" | wob -M40 -W800 -abottom"
+bindsym XF86MonBrightnessUp exec brightnessctl s +10% && brightnessctl | gawk 'match($0, /\((.*)%\)/, arr) { print arr[1] }' > /tmp/swaypipe.bright
+bindsym XF86MonBrightnessDown exec brightnessctl s 10%- && brightnessctl | gawk 'match($0, /\((.*)%\)/, arr) { print arr[1] }' > /tmp/swaypipe.bright
+
+exec_always "rm /tmp/swaypipe.volume; mkfifo /tmp/swaypipe.volume"
+exec_always "tail -f "/tmp/swaypipe.volume" | wob -M40 -W800 -abottom"
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > /tmp/swaypipe.volume
+bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > /tmp/swaypipe.volume
+bindsym XF86AudioMute exec (amixer get Master | grep off > /dev/null && amixer -q set Master unmute && amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print substr($2, 0, length($2)-1) }' > /tmp/swaypipe.volume) || (amixer -q set Master mute && echo 0 > /tmp/swaypipe.volume)
+
+
+# Autostart applications
+exec waybar
+exec dunst
+exec flatpak run com.getferdi.Ferdi
+#exec keepassopen
+exec udiskie
+#exec /home/forest/Applications/pcloud
+exec syncthing --no-browser
+
+include /etc/sway/config.d/*
